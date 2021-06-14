@@ -39,25 +39,25 @@ echo "install rds /bin/true" >> /etc/modprobe.d/CIS.conf
 echo "install tipc /bin/true" >> /etc/modprobe.d/CIS.conf
 clear
 echo -e ""
-echo -e "Setting up Iptables Rules"
-sh templates/iptables-CIS.sh
-cp templates/iptables-CIS.sh /etc/init.d/
-chmod +x /etc/init.d/iptables-CIS.sh
-ln -s /etc/init.d/iptables-CIS.sh /etc/rc2.d/S99iptables-CIS.sh
+# echo -e "Setting up Iptables Rules"
+# sh templates/iptables-CIS.sh
+# cp templates/iptables-CIS.sh /etc/init.d/
+# chmod +x /etc/init.d/iptables-CIS.sh
+# ln -s /etc/init.d/iptables-CIS.sh /etc/rc2.d/S99iptables-CIS.sh
 echo -e ""
-echo -e "Installing and configuring Auditd"
-apt-get install auditd -y
-cp templates/auditd-CIS.conf /etc/audit/auditd.conf
-systemctl enable auditd
-sed -i 's/GRUB_CMDLINE_LINUX="ipv6.disable=1"/GRUB_CMDLINE_LINUX="ipv6.disable=1\ audit=1"/g' /etc/default/grub
-cp templates/audit-CIS.rules /etc/audit/audit.rules
-find / -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '{print \
-"-a always,exit -F path=" $1 " -F perm=x -F auid>=1000 -F auid!=4294967295 \
--k privileged" } ' >> /etc/audit/audit.rules
-echo " " >> /etc/audit/audit.rules
-echo "#End of Audit Rules" >> /etc/audit/audit.rules
-echo "-e 2" >>/etc/audit/audit.rules
-cp /etc/audit/audit.rules /etc/audit/rules.d/audit.rules
+# echo -e "Installing and configuring Auditd"
+# apt-get install auditd -y
+# cp templates/auditd-CIS.conf /etc/audit/auditd.conf
+# systemctl enable auditd
+# sed -i 's/GRUB_CMDLINE_LINUX="ipv6.disable=1"/GRUB_CMDLINE_LINUX="ipv6.disable=1\ audit=1"/g' /etc/default/grub
+# cp templates/audit-CIS.rules /etc/audit/audit.rules
+# find / -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '{print \
+# "-a always,exit -F path=" $1 " -F perm=x -F auid>=1000 -F auid!=4294967295 \
+# -k privileged" } ' >> /etc/audit/audit.rules
+# echo " " >> /etc/audit/audit.rules
+# echo "#End of Audit Rules" >> /etc/audit/audit.rules
+# echo "-e 2" >>/etc/audit/audit.rules
+# cp /etc/audit/audit.rules /etc/audit/rules.d/audit.rules
 chmod -R g-wx,o-rwx /var/log/*
 chown root:root /etc/cron*
 chmod og-rwx /etc/cron*
